@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Forno di Nonna — Cardápio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Work+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-dark:#241811;
+    --bg-panel:#33241A;
+    --bg-panel-2:#3D2C1F;
+    --cream:#F1E7D3;
+    --cream-dim:#D9CBAF;
+    --red:#B84A2E;
+    --red-dark:#8F3A24;
+    --olive:#6E7C48;
+    --gold:#D6A93C;
+    --line: rgba(241,231,211,0.14);
+    font-size:16px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:
+      radial-gradient(ellipse at 20% 0%, rgba(214,169,60,0.08), transparent 55%),
+      radial-gradient(ellipse at 90% 30%, rgba(184,74,46,0.10), transparent 50%),
+      repeating-linear-gradient(115deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px, transparent 1px, transparent 60px),
+      var(--bg-dark);
+    color:var(--cream);
+    font-family:'Work Sans', sans-serif;
+    min-height:100vh;
+    padding-bottom:100px;
+  }
+  .eyebrow{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.72rem;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--gold);
+  }
+  header{
+    padding:48px 20px 32px;
+    text-align:center;
+    border-bottom:1px solid var(--line);
+    position:relative;
+  }
+  header h1{
+    font-family:'Fraunces', serif;
+    font-weight:700;
+    font-size:clamp(2.2rem, 7vw, 3.4rem);
+    letter-spacing:-0.01em;
+    margin:10px 0 8px;
+  }
+  header p.tagline{
+    font-style:italic;
+    color:var(--cream-dim);
+    font-size:1.02rem;
+    margin-bottom:16px;
+  }
+  .status-row{
+    display:flex; gap:10px; justify-content:center; flex-wrap:wrap;
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.78rem;
+    color:var(--cream-dim);
+  }
+  .badge{
+    display:inline-flex; align-items:center; gap:6px;
+    background:rgba(110,124,72,0.18);
+    border:1px solid rgba(110,124,72,0.4);
+    padding:5px 12px; border-radius:100px;
+  }
+  .badge .dot{width:6px; height:6px; border-radius:50%; background:var(--olive); box-shadow:0 0 8px var(--olive);}
+
+  main{max-width:720px; margin:0 auto; padding:0 20px;}
+
+  .divider{
+    display:flex; align-items:center; gap:14px;
+    margin:40px 0 20px;
+  }
+  .divider .line{flex:1; height:1px; background:var(--line);}
+  .divider svg{flex-shrink:0; opacity:0.85;}
+
+  .category-title{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:1.5rem;
+    text-align:center;
+    color:var(--cream);
+  }
+
+  .item{
+    display:flex; justify-content:space-between; gap:16px;
+    padding:18px 4px;
+    border-bottom:1px solid var(--line);
+    transition:background 0.15s ease;
+  }
+  .item:hover{background:rgba(241,231,211,0.03);}
+  .item-info{flex:1;}
+  .item-info h3{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:1.12rem;
+    margin-bottom:4px;
+  }
+  .item-info p{
+    color:var(--cream-dim);
+    font-size:0.88rem;
+    line-height:1.5;
+  }
+  .item-side{
+    display:flex; flex-direction:column; align-items:flex-end; gap:10px; flex-shrink:0;
+  }
+  .price{
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.95rem;
+    color:var(--gold);
+  }
+  .add-btn{
+    width:34px; height:34px; border-radius:50%;
+    border:1px solid var(--red);
+    background:transparent;
+    color:var(--red);
+    font-size:1.2rem;
+    cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    transition:all 0.15s ease;
+    line-height:1;
+  }
+  .add-btn:hover{background:var(--red); color:var(--cream); transform:scale(1.06);}
+  .add-btn:active{transform:scale(0.94);}
+
+  footer.info{
+    text-align:center; padding:40px 20px 20px;
+    color:var(--cream-dim);
+    font-size:0.82rem;
+    font-family:'JetBrains Mono', monospace;
+    line-height:1.8;
+  }
+
+  /* Cart floating button */
+  #cart-fab{
+    position:fixed; bottom:20px; left:50%; transform:translateX(-50%);
+    background:var(--red);
+    color:var(--cream);
+    border:none;
+    padding:14px 24px;
+    border-radius:100px;
+    font-family:'Work Sans', sans-serif;
+    font-weight:600;
+    font-size:0.95rem;
+    display:none;
+    align-items:center; gap:10px;
+    cursor:pointer;
+    box-shadow:0 8px 24px rgba(184,74,46,0.4);
+    z-index:50;
+    transition:transform 0.15s ease;
+  }
+  #cart-fab:hover{transform:translateX(-50%) translateY(-2px);}
+  #cart-fab .count{
+    background:var(--cream); color:var(--red-dark);
+    width:22px; height:22px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.76rem; font-weight:600;
+  }
+
+  /* Cart panel (order ticket) */
+  #overlay{
+    position:fixed; inset:0; background:rgba(15,10,6,0.6);
+    opacity:0; pointer-events:none; transition:opacity 0.25s ease;
+    z-index:90;
+  }
+  #overlay.open{opacity:1; pointer-events:auto;}
+
+  #cart-panel{
+    position:fixed; bottom:0; left:0; right:0;
+    max-width:520px; margin:0 auto;
+    background:var(--cream);
+    color:#2A1D14;
+    border-radius:18px 18px 0 0;
+    transform:translateY(105%);
+    transition:transform 0.3s cubic-bezier(.2,.8,.25,1);
+    z-index:100;
+    max-height:88vh;
+    display:flex; flex-direction:column;
+    clip-path: polygon(
+      0% 14px, 2% 0%, 4% 14px, 6% 0%, 8% 14px, 10% 0%, 12% 14px, 14% 0%, 16% 14px, 18% 0%,
+      20% 14px, 22% 0%, 24% 14px, 26% 0%, 28% 14px, 30% 0%, 32% 14px, 34% 0%, 36% 14px, 38% 0%,
+      40% 14px, 42% 0%, 44% 14px, 46% 0%, 48% 14px, 50% 0%, 52% 14px, 54% 0%, 56% 14px, 58% 0%,
+      60% 14px, 62% 0%, 64% 14px, 66% 0%, 68% 14px, 70% 0%, 72% 14px, 74% 0%, 76% 14px, 78% 0%,
+      80% 14px, 82% 0%, 84% 14px, 86% 0%, 88% 14px, 90% 0%, 92% 14px, 94% 0%, 96% 14px, 98% 0%,
+      100% 14px, 100% 100%, 0% 100%
+    );
+    padding-top:20px;
+  }
+  #cart-panel.open{transform:translateY(0);}
+
+  .ticket-stamp{
+    position:absolute; top:70px; right:24px;
+    font-family:'JetBrains Mono', monospace;
+    font-weight:600; font-size:0.85rem;
+    color:var(--red);
+    border:2px solid var(--red);
+    padding:4px 10px; border-radius:6px;
+    transform:rotate(-9deg);
+    opacity:0.35;
+    letter-spacing:0.1em;
+    pointer-events:none;
+  }
+
+  .cart-header{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:0 20px 14px;
+    border-bottom:1px dashed rgba(42,29,20,0.25);
+  }
+  .cart-header h2{
+    font-family:'Fraunces', serif; font-size:1.3rem;
+  }
+  .close-btn{
+    background:none; border:none; font-size:1.4rem; cursor:pointer; color:#2A1D14; line-height:1;
+    width:32px; height:32px;
+  }
+
+  .cart-items{
+    overflow-y:auto; padding:12px 20px; flex:1;
+  }
+  .cart-line{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:12px 0;
+    border-bottom:1px solid rgba(42,29,20,0.12);
+  }
+  .cart-line .name{font-weight:600; font-size:0.95rem;}
+  .cart-line .unit{font-family:'JetBrains Mono', monospace; font-size:0.78rem; color:#6b5a45;}
+  .qty-control{
+    display:flex; align-items:center; gap:10px;
+  }
+  .qty-control button{
+    width:26px; height:26px; border-radius:50%;
+    border:1px solid #2A1D14; background:transparent;
+    cursor:pointer; font-size:1rem; line-height:1;
+  }
+  .qty-control span{font-family:'JetBrains Mono', monospace; min-width:16px; text-align:center;}
+  .line-total{font-family:'JetBrains Mono', monospace; font-weight:600; min-width:70px; text-align:right;}
+
+  .empty-msg{text-align:center; color:#8a7860; padding:40px 0; font-style:italic;}
+
+  .cart-form{padding:14px 20px 0;}
+  .cart-form label{
+    display:block; font-family:'JetBrains Mono', monospace; font-size:0.72rem;
+    letter-spacing:0.05em; text-transform:uppercase; color:#6b5a45; margin-bottom:5px;
+  }
+  .cart-form input, .cart-form textarea{
+    width:100%; border:1px solid rgba(42,29,20,0.25); border-radius:8px;
+    padding:9px 12px; font-family:'Work Sans', sans-serif; font-size:0.92rem;
+    margin-bottom:12px; background:#fbf7ee; color:#2A1D14;
+  }
+  .cart-form textarea{resize:vertical; min-height:50px;}
+
+  .cart-footer{
+    padding:14px 20px 22px;
+    border-top:1px dashed rgba(42,29,20,0.25);
+  }
+  .total-row{
+    display:flex; justify-content:space-between; align-items:baseline;
+    margin-bottom:14px;
+  }
+  .total-row .label{font-family:'JetBrains Mono', monospace; font-size:0.85rem; color:#6b5a45;}
+  .total-row .value{font-family:'Fraunces', serif; font-weight:700; font-size:1.6rem;}
+
+  #send-btn{
+    width:100%; background:var(--olive); color:#fff; border:none;
+    padding:15px; border-radius:12px; font-size:1rem; font-weight:600;
+    cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;
+    transition:transform 0.15s ease, background 0.15s ease;
+  }
+  #send-btn:hover{background:#5c6a3b; transform:translateY(-1px);}
+  #send-btn:disabled{background:#b8b2a0; cursor:not-allowed; transform:none;}
+
+  @media (max-width:480px){
+    #cart-fab{left:20px; right:20px; transform:none; justify-content:center;}
+    #cart-fab:hover{transform:translateY(-2px);}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">Pizzaria artesanal</div>
+  <h1 id="restaurant-name">Forno di Nonna</h1>
+  <p class="tagline" id="restaurant-tagline">Pizza napolitana no forno a lenha, do jeito da vovó</p>
+  <div class="status-row">
+    <span class="badge"><span class="dot"></span> Aberto agora</span>
+    <span class="badge" id="delivery-info">Entrega em 30–45min</span>
+  </div>
+</header>
+
+<main id="menu"></main>
+
+<footer class="info">
+  <div>Rua Abraão Soares — Pinheiro, Maranhão</div>
+  <div>Todos os dias · 18h30 às 23h00</div>
+</footer>
+
+<button id="cart-fab" onclick="openCart()">
+  <span class="count" id="fab-count">0</span>
+  <span id="fab-text">Ver pedido</span>
+  <span id="fab-total"></span>
+</button>
+
+<div id="overlay" onclick="closeCart()"></div>
+<div id="cart-panel">
+  <div class="ticket-stamp">PEDIDO</div>
+  <div class="cart-header">
+    <h2>Seu pedido</h2>
+    <button class="close-btn" onclick="closeCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cart-items"></div>
+  <div class="cart-form">
+    <label>Seu nome</label>
+    <input type="text" id="customer-name" placeholder="Como podemos te chamar?">
+    <label>Endereço de entrega</label>
+    <input type="text" id="customer-address" placeholder="Rua, número, bairro (deixe em branco se for retirar)">
+    <label>Observações</label>
+    <textarea id="customer-notes" placeholder="Ex: sem cebola, troco para R$ 100, campainha quebrada..."></textarea>
+  </div>
+  <div class="cart-footer">
+    <div class="total-row">
+      <span class="label">Total</span>
+      <span class="value" id="cart-total">R$ 0,00</span>
+    </div>
+    <button id="send-btn" onclick="sendOrder()" disabled>Enviar pedido pelo WhatsApp →</button>
+  </div>
+</div>
+
+<script>
+/* =========================================================
+   CONFIGURAÇÃO — edite tudo aqui para personalizar o site
+   ========================================================= */
+const CONFIG = {
+  restaurantName: "BIG Massas",
+  tagline: "Excelência em sabores",
+  deliveryInfo: "Entrega em 30–45min",
+  // Número do WhatsApp no formato: código do país + DDD + número, SEM espaços, +, ( ) ou -
+  // Exemplo: 55 (Brasil) + 11 (DDD) + 999999999
+  whatsappNumber: "5598984412962",
+
+  menu: [
+    {
+      category: "Clássicas",
+      items: [
+        { name: "Margherita", desc: "Molho de tomate, mussarela de búfala, manjericão fresco e azeite", price: 42.00 },
+        { name: "Marguerita", desc: "Molho de tomate, mussarela, tomate seco e orégano", price: 44.00 },
+        { name: "Calabresa", desc: "Molho de tomate, mussarela, calabresa fatiada e cebola roxa", price: 46.00 },
+        { name: "Quatro Queijos", desc: "Mussarela, gorgonzola, parmesão e provolone", price: 49.00 }
+      ]
+    },
+    {
+      category: "Especiais da Casa",
+      items: [
+        { name: "Nonna", desc: "Molho de tomate, mussarela de búfala, presunto de parma, rúcula e lascas de parmesão", price: 58.00 },
+        { name: "Funghi Trufada", desc: "Creme de leite, mussarela, cogumelos salteados e azeite trufado", price: 62.00 },
+        { name: "Figo com Gorgonzola", desc: "Base branca, gorgonzola, figo caramelizado e mel", price: 59.00 }
+      ]
+    },
+    {
+      category: "Bebidas",
+      items: [
+        { name: "Água mineral 500ml", desc: "Com ou sem gás", price: 6.00 },
+        { name: "Refrigerante lata", desc: "Coca-Cola, Guaraná ou Fanta", price: 7.00 },
+        { name: "Suco natural 300ml", desc: "Laranja, limão ou maracujá", price: 10.00 },
+        { name: "Vinho tinto (taça)", desc: "Seleção da casa", price: 22.00 }
+      ]
+    },
+    {
+      category: "Sobremesas",
+      items: [
+        { name: "Nutella com morango", desc: "Massa fina, Nutella e morangos frescos", price: 34.00 },
+        { name: "Tiramisù", desc: "Receita tradicional da casa", price: 22.00 }
+      ]
+    }
+  ]
+};
+
+/* =========================================================
+   LÓGICA DO CARDÁPIO E CARRINHO — normalmente não precisa mexer
+   ========================================================= */
+document.getElementById('restaurant-name').textContent = CONFIG.restaurantName;
+document.getElementById('restaurant-tagline').textContent = CONFIG.tagline;
+document.getElementById('delivery-info').textContent = CONFIG.deliveryInfo;
+document.title = CONFIG.restaurantName + " — Cardápio";
+
+const cart = {}; // key: "categoria|nome" -> {name, price, qty}
+
+const dividerIcon = `<svg width="22" height="16" viewBox="0 0 22 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M11 1C11 1 6 5.5 6 9.5C6 12.5 8.2 15 11 15C13.8 15 16 12.5 16 9.5C16 5.5 11 1 11 1Z" stroke="#D6A93C" stroke-width="1.3"/>
+  <path d="M11 6C11 6 9 8 9 10C9 11.4 9.9 12.5 11 12.5" stroke="#D6A93C" stroke-width="1" stroke-linecap="round"/>
+</svg>`;
+
+function fmt(v){
+  return "R$ " + v.toFixed(2).replace('.', ',');
+}
+
+function renderMenu(){
+  const main = document.getElementById('menu');
+  main.innerHTML = '';
+  CONFIG.menu.forEach(cat => {
+    const div = document.createElement('div');
+    div.className = 'divider';
+    div.innerHTML = `<div class="line"></div>${dividerIcon}<div class="line"></div>`;
+    main.appendChild(div);
+
+    const title = document.createElement('div');
+    title.className = 'category-title';
+    title.textContent = cat.category;
+    main.appendChild(title);
+
+    cat.items.forEach(item => {
+      const key = cat.category + '|' + item.name;
+      const row = document.createElement('div');
+      row.className = 'item';
+      row.innerHTML = `
+        <div class="item-info">
+          <h3>${item.name}</h3>
+          <p>${item.desc}</p>
+        </div>
+        <div class="item-side">
+          <span class="price">${fmt(item.price)}</span>
+          <button class="add-btn" aria-label="Adicionar ${item.name}">+</button>
+        </div>`;
+      row.querySelector('.add-btn').addEventListener('click', () => addToCart(key, item.name, item.price));
+      main.appendChild(row);
+    });
+  });
+}
+
+function addToCart(key, name, price){
+  if(!cart[key]) cart[key] = { name, price, qty: 0 };
+  cart[key].qty += 1;
+  updateFab();
+}
+
+function changeQty(key, delta){
+  if(!cart[key]) return;
+  cart[key].qty += delta;
+  if(cart[key].qty <= 0) delete cart[key];
+  renderCart();
+  updateFab();
+}
+
+function getTotal(){
+  return Object.values(cart).reduce((sum, i) => sum + i.price * i.qty, 0);
+}
+
+function getCount(){
+  return Object.values(cart).reduce((sum, i) => sum + i.qty, 0);
+}
+
+function updateFab(){
+  const count = getCount();
+  const fab = document.getElementById('cart-fab');
+  document.getElementById('fab-count').textContent = count;
+  document.getElementById('fab-total').textContent = count > 0 ? '· ' + fmt(getTotal()) : '';
+  fab.style.display = count > 0 ? 'flex' : 'none';
+  document.getElementById('send-btn').disabled = count === 0;
+  if(document.getElementById('cart-panel').classList.contains('open')) renderCart();
+}
+
+function renderCart(){
+  const container = document.getElementById('cart-items');
+  const entries = Object.entries(cart);
+  if(entries.length === 0){
+    container.innerHTML = '<div class="empty-msg">Seu pedido está vazio.<br>Toque em "+" no cardápio para adicionar itens.</div>';
+  } else {
+    container.innerHTML = '';
+    entries.forEach(([key, item]) => {
+      const line = document.createElement('div');
+      line.className = 'cart-line';
+      line.innerHTML = `
+        <div>
+          <div class="name">${item.name}</div>
+          <div class="unit">${fmt(item.price)} un.</div>
+        </div>
+        <div class="qty-control">
+          <button aria-label="Diminuir">−</button>
+          <span>${item.qty}</span>
+          <button aria-label="Aumentar">+</button>
+        </div>
+        <div class="line-total">${fmt(item.price * item.qty)}</div>`;
+      const btns = line.querySelectorAll('.qty-control button');
+      btns[0].addEventListener('click', () => changeQty(key, -1));
+      btns[1].addEventListener('click', () => changeQty(key, 1));
+      container.appendChild(line);
+    });
+  }
+  document.getElementById('cart-total').textContent = fmt(getTotal());
+}
+
+function openCart(){
+  renderCart();
+  document.getElementById('cart-panel').classList.add('open');
+  document.getElementById('overlay').classList.add('open');
+}
+function closeCart(){
+  document.getElementById('cart-panel').classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
+}
+
+function sendOrder(){
+  const entries = Object.values(cart);
+  if(entries.length === 0) return;
+
+  const name = document.getElementById('customer-name').value.trim();
+  const address = document.getElementById('customer-address').value.trim();
+  const notes = document.getElementById('customer-notes').value.trim();
+
+  let msg = `🍕 *Pedido — ${CONFIG.restaurantName}*\n\n`;
+  entries.forEach(item => {
+    msg += `• ${item.qty}x ${item.name} — ${fmt(item.price * item.qty)}\n`;
+  });
+  msg += `\n*Total: ${fmt(getTotal())}*\n`;
+  if(name) msg += `\n👤 Nome: ${name}`;
+  if(address) msg += `\n📍 Endereço: ${address}`;
+  if(notes) msg += `\n📝 Observações: ${notes}`;
+
+  const url = `https://wa.me/${CONFIG.whatsappNumber}?text=${encodeURIComponent(msg)}`;
+  window.open(url, '_blank');
+}
+
+renderMenu();
+</script>
+</body>
+</html>
